@@ -1,4 +1,5 @@
 .env/
 sort/
+__pycache__/
 out.mp4
 sample.mp4
