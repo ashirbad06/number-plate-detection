@@ -11,10 +11,16 @@ mot_tracker = Sort()
 coco_model = YOLO('yolov8n.pt')
 license_plate_detector = YOLO('./models/license_plate_detector.pt')
 
-# this is a commm
-
 # load video
 cap = cv2.VideoCapture('./sample.mp4')
+# {0: 'person',
+#  1: 'bicycle',
+#  2: 'car',
+#  3: 'motorcycle',
+#  4: 'airplane',
+#  5: 'bus',
+#  6: 'train',
+#  7: 'truck',
 
 vehicle_classes = [2, 3, 5, 7]
 
@@ -25,8 +31,8 @@ while ret:
     frame_nmr += 1
     ret, frame = cap.read()
     if ret:
-        # if frame_nmr>100:
-        #     break
+        if frame_nmr>100:
+            break
         results[frame_nmr] = {}
         # detect vehicles
         detections = coco_model(frame)[0]
@@ -58,6 +64,11 @@ while ret:
 
                 # read license plate number
                 license_plate_text, license_plate_text_score = read_license_plate(license_plate_crop_thresh)
+
+                # # Display the thresholded image
+                # cv2.imshow('Thresholded License Plate', license_plate_crop_thresh)
+                # cv2.waitKey(0)  # Wait indefinitely until a key is pressed
+                # cv2.destroyAllWindows()  # Close the window after a key is pressed
 
                 if license_plate_text is not None:
                     results[frame_nmr][car_id] = {'car': {'bbox': [xcar1, ycar1, xcar2, ycar2]},
